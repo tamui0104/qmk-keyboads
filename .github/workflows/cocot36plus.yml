@@ -1,0 +1,30 @@
+name: cocot36plus
+
+on:
+  - push
+  
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Clone qmk/qmk_firmware
+        uses: actions/checkout@v2
+        with:
+          repository: 'qmk/qmk_firmware'
+          submodules: true
+          
+      - name: Clone tamui0104/qmk-keyboards
+        uses: actions/checkout@v2
+        with:
+          path: './keyboards/'
+           
+      - name: Install dependencies
+        run: ./util/qmk_install.sh
+
+      - name: Compile
+        run: ./bin/qmk compile -kb aki27/cocot36plus -km default
+            
+      - uses: actions/upload-artifact@v2
+        with:
+          name: cocot36plus_rev1_default.hex
+          path: ./.build/cocot36plus_rev1_default.hex
